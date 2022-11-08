@@ -7,6 +7,10 @@
 
   Jest will be utilized with TDD and the deployed site is linked **[here!]()**
 
+## Run this Application Locally
+  - npm i redux, react-redux redux-devtools-extension MaterialUI react-if jest
+
+
 ## Core Functionality
   - Display a list of product catergories
   - Dispaly a listing of products from each category upon selecting a category
