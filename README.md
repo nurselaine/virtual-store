@@ -29,7 +29,7 @@
       - Material UI Components & Styling
   - Phase 2: Shopping Cart
       - Add items to a shopping cart
-      - Update quantities
+      - Update quantities in the cart & calculate a total cost
       - Remove items from the cart
       - Show the cart in real-time on the UI
   - Phase 3: Live Data
