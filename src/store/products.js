@@ -15,6 +15,24 @@ function productsReducer(state = initialState, action){
 
   switch(type){
     case 'UPDATE_ACTIVE': return {products: initialState.products.filter(product => product.category === payload.name)};
+    case 'INCREMENT_STOCK': return {products: state.products.map(product => {
+      if(product.name === payload.name){
+        return {
+          ...product,
+          inStock: product.inStock + 1,
+        }
+      }
+      return product;
+    })};
+    case 'DECREMENT_STOCK': return {products: state.products.map(product => {
+      if(product.name === payload.name){
+        return {
+          ...product,
+          inStock: product.inStock - 1,
+        }
+      }
+      return product;
+    })};
     default: return state;
   }
 };
@@ -22,6 +40,20 @@ function productsReducer(state = initialState, action){
 export function updatedProducts(category){
   return {
     products: category,
+  }
+};
+
+export function incrementStock(product){
+  return {
+    type: 'INCREMENT_STOCK',
+    payload: product,
+  }
+};
+
+export function decrementStock(product){
+  return {
+    type: 'DECREMENT_STOCK',
+    payload: product,
   }
 };
 
