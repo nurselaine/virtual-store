@@ -1,21 +1,20 @@
+import { createAction, createReducer } from '@reduxjs/toolkit';
+import axios from 'axios';
+
 let initialState = {
-  products: [
-    { name: 'TV', category: 'electronics', price: 699.00, inStock: 5 },
-    { name: 'Radio', category: 'electronics', price: 99.00, inStock: 15 },
-    { name: 'Shirt', category: 'clothing', price: 9.00, inStock: 25 },
-    { name: 'Socks', category: 'clothing', price: 12.00, inStock: 10 },
-    { name: 'Apples', category: 'food', price: .99, inStock: 500 },
-    { name: 'Eggs', category: 'food', price: 1.99, inStock: 12 },
-    { name: 'Bread', category: 'food', price: 2.39, inStock: 90 },
-  ],
-}
+  products: [],
+  categoryProducts: [],
+};
+
+
 
 function productsReducer(state = initialState, action){
   const { type, payload } = action;
 
   switch(type){
-    case 'UPDATE_ACTIVE': return {products: initialState.products.filter(product => product.category === payload.name)};
-    case 'INCREMENT_STOCK': return {products: state.products.map(product => {
+    case 'GET_PRODUCTS': return {products: payload, categoryProducts: payload};
+    case 'UPDATE_ACTIVE': return {...state, categoryProducts: state.products.filter(product => product.category === payload.name)};
+    case 'INCREMENT_STOCK': return {...state, products: state.products.map(product => {
       if(product.name === payload.name){
         return {
           ...product,
@@ -24,7 +23,7 @@ function productsReducer(state = initialState, action){
       }
       return product;
     })};
-    case 'DECREMENT_STOCK': return {products: state.products.map(product => {
+    case 'DECREMENT_STOCK': return {...state, products: state.products.map(product => {
       if(product.name === payload.name){
         return {
           ...product,
@@ -33,28 +32,67 @@ function productsReducer(state = initialState, action){
       }
       return product;
     })};
+    case 'UPDATE_INVENTORY': return {...state, products: state.products.map(product => product._id === payload._id ? payload : product)};
     default: return state;
   }
 };
 
 export function updatedProducts(category){
   return {
+    type: 'UPDATE_ACTIVE',
     products: category,
   }
 };
+export const getProducts = () => async (dispatch, getState) => {
+  let results = await axios.get('https://api-js401.herokuapp.com/api/v1/products');
+  console.log(results.data.results);
+  dispatch(setProducts(results.data.results));
+};
 
-export function incrementStock(product){
+export const setProducts = (data) => {
+  return {
+    type: 'GET_PRODUCTS',
+    payload: data,
+  }
+};
+
+export const incrementStock = (product) => async(dispatch, getState) => {
+  let updatedProduct = {...product, inStock: product.inStock + 1};
+  console.log(updatedProduct);
+  let rez = await axios.put(`https://api-js401.herokuapp.com/api/v1/products/${product._id}`, updatedProduct);
+  console.log('updated product inventory', rez);
+  dispatch(setUpdateProductInventory(rez));
   return {
     type: 'INCREMENT_STOCK',
     payload: product,
   }
 };
 
-export function decrementStock(product){
+export const decrementStock = (product) => async(dispatch, getState) => {
+  let updatedProduct = {...product, inStock: product.inStock - 1};
+  console.log(updatedProduct);
+  let rez = await axios.put(`https://api-js401.herokuapp.com/api/v1/products/${product._id}`, updatedProduct);
+  console.log('updated product inventory', rez);
+  dispatch(setUpdateProductInventory(rez));
   return {
     type: 'DECREMENT_STOCK',
     payload: product,
   }
 };
+
+
+export const updateProductInventory = (product) => async (dispatch, getState) => {
+console.log(product);
+  let rez = await axios.put(`https://api-js401.herokuapp.com/api/v1/products/${product._id}`, product);
+  console.log('updated product inventory', rez);
+  dispatch(setUpdateProductInventory(rez));
+};
+
+export const setUpdateProductInventory = (data) => {
+  return {
+    type: 'UPDATE_INVENTORY',
+    payload: data,
+  }
+}
 
 export default productsReducer;

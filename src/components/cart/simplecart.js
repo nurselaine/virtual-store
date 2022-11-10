@@ -1,13 +1,19 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useEffect } from "react";
+import { connect, useDispatch } from "react-redux";
+import { removeFromCart } from "../../store/cart";
+import { incrementStock, updateProductInventory } from "../../store/products";
 
 import { Box, Typography } from '@mui/material';
 import { useTheme } from "@emotion/react";
 
 function SimpleCart(props) {
-  const { cart } = props;
-  const theme = useTheme();
+  const { cart, removeFromCart, incrementStock } = props;
 
+  // const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   dispatch(updateProductInventory())
+  // }, [incrementStock]);
 
 
   return (
@@ -23,8 +29,10 @@ function SimpleCart(props) {
       <ul style={{padding: '0'}}>
         {cart.map((product, index) => {
           return (
-            
-            <li data-testid={`cart-list-${index}`} style={{listStyle: 'none', color: '#0288d1'}}><Typography variant="h6">{product.name}</Typography></li>
+            <div>
+              <li data-testid={`cart-list-${index}`} style={{listStyle: 'none', color: '#0288d1'}}><Typography variant="h6">{product.name}</Typography></li>
+              <button onClick={() => {removeFromCart(product); incrementStock(product)}}>delete</button>
+            </div>
           )
         })}
       </ul>
@@ -36,4 +44,10 @@ const mapStateToProps = ({cart}) => ({
   cart: cart.cart,
 });
 
-export default connect(mapStateToProps)(SimpleCart);
+const mapDispatchToProps = {
+  removeFromCart,
+  incrementStock,
+  updateProductInventory,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SimpleCart);

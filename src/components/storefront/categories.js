@@ -1,8 +1,9 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useEffect } from "react";
+import { connect, useDispatch } from "react-redux";
 import { When } from 'react-if';
 import { updateCategory } from '../../store/categories';
 import { updatedProducts } from '../../store/products';
+import { getCategories } from "../../store/categories";
 
 import { Box, createTheme, Divider, ThemeProvider, Typography } from '@mui/material';
 
@@ -16,12 +17,15 @@ let theme = createTheme({
 });
 
 function Categories(props) {
+  let dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCategories());
+  }, []);
 
   const { categories, updateCategory, activeCategory } = props;
-  console.log(categories, updateCategory, activeCategory);
 
-  let categoriesToRender = categories.filter(category => category.name !== activeCategory);
-console.log(categoriesToRender, activeCategory);
+  // let categoriesToRender = categories.filter(category => category.name !== activeCategory);
   return (
     <ThemeProvider theme={theme} >
       <Box sx={{margin: '30px'}}>
@@ -41,7 +45,7 @@ console.log(categoriesToRender, activeCategory);
   );
 }
 
-const mapStateToProps = ({category }) => { // arguement represents a feild from the store object. Destructure the store object with the property that has the feilds needed for the component, once the store feild is destructure, use dot notation to grab the values from within that object's property
+const mapStateToProps = ({ category }) => { // arguement represents a feild from the store object. Destructure the store object with the property that has the feilds needed for the component, once the store feild is destructure, use dot notation to grab the values from within that object's property
   // console.log('categoriessss',categories);
   return {
     categories: category.categories,
@@ -52,6 +56,7 @@ const mapStateToProps = ({category }) => { // arguement represents a feild from 
 const mapDispatchToProps = {
   updateCategory,
   updatedProducts,
+  getCategories,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Categories);

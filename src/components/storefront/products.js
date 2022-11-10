@@ -1,21 +1,27 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useEffect } from "react";
+import { connect, useDispatch } from "react-redux";
 import { updatedProducts } from "../../store/products";
 import { addToCart } from "../../store/cart";
 import { decrementStock } from "../../store/products";
+import { getProducts } from "../../store/products";
 
 import { Card, CardActions, CardContent, CardMedia, Button, Grid, Typography } from '@mui/material';
 
 function Products(props) {
-  const { products, addToCart, decrementStock } = props;
-  console.log(products);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getProducts());
+  },[]);
+
+  const { categoryProducts, addToCart, decrementStock } = props;
 
   return (
     <Grid container 
       spacing={3} 
       sx={{ margin: 'auto', width: '80vw' }}>
       {
-        products.map((product, index) => (
+        categoryProducts.map((product, index) => (
           <Grid item xs={4} key={`product-grid-${index}`} sx={{ boxShadow: '6', boxShadow: 'none' }} >
             <Card raised={true} key={`product-${index}`} sx={{ maxWidth: 345, boxShadow: 3, margin: 'auto' }}>
               <CardMedia
@@ -42,6 +48,7 @@ function Products(props) {
 
 const mapStateToProps = ({ products }) => ({
   products: products.products,
+  categoryProducts: products.categoryProducts,
 });
 
 const mapDispatchToProps = {
