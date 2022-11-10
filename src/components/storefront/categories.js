@@ -33,7 +33,7 @@ function Categories(props) {
         <Box sx={{display: 'flex', fontSize: '5rem'}}>
           {
             categories.map((category, index) => (
-              <When condition={category.name !== activeCategory}>
+              <When key={`when-${index}`} condition={category.name !== activeCategory}>
                 <Typography sx={{marginRight: '15px', color: '#0288d1'}} key={`category-${index}`} onClick={() => {updateCategory(category); updatedProducts(category)}}>{category.name.toUpperCase()}</Typography>
                 <Divider sx={{marginRight: '15px'}} orientation="vertical" key={`divider-${index}`} flexItem />
               </When>
@@ -46,7 +46,6 @@ function Categories(props) {
 }
 
 const mapStateToProps = ({ category }) => { // arguement represents a feild from the store object. Destructure the store object with the property that has the feilds needed for the component, once the store feild is destructure, use dot notation to grab the values from within that object's property
-  // console.log('categoriessss',categories);
   return {
     categories: category.categories,
     activeCategories: category.activeCategory,

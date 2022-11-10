@@ -29,9 +29,9 @@ function SimpleCart(props) {
       <ul style={{padding: '0'}}>
         {cart.map((product, index) => {
           return (
-            <div>
+            <div key={`cart-list-${index}`}>
               <li data-testid={`cart-list-${index}`} style={{listStyle: 'none', color: '#0288d1'}}><Typography variant="h6">{product.name}</Typography></li>
-              <button onClick={() => {removeFromCart(product); incrementStock(product)}}>delete</button>
+              <button key={`delete-${index}`} onClick={() => {removeFromCart(product); incrementStock(product)}}>delete</button>
             </div>
           )
         })}

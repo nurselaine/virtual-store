@@ -25,13 +25,13 @@ export const add = (product) => {
     type: 'ADD',
     payload: product,
   }
-};
+}
 
 export const removeFromCart = (product) => {
   return {
     type: 'REMOVE_FROM_CART',
     payload: product,
   }
-};
+}
 
 export default cartReducer;

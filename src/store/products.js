@@ -32,7 +32,7 @@ function productsReducer(state = initialState, action){
       }
       return product;
     })};
-    case 'UPDATE_INVENTORY': return {...state, products: state.products.map(product => product._id === payload._id ? payload : product)};
+    case 'UPDATE_INVENTORY': return {...state, products: [...state.products, payload]};
     default: return state;
   }
 };
@@ -60,8 +60,8 @@ export const incrementStock = (product) => async(dispatch, getState) => {
   let updatedProduct = {...product, inStock: product.inStock + 1};
   console.log(updatedProduct);
   let rez = await axios.put(`https://api-js401.herokuapp.com/api/v1/products/${product._id}`, updatedProduct);
-  console.log('updated product inventory', rez);
-  dispatch(setUpdateProductInventory(rez));
+  console.log('incremented product inventory', rez);
+  dispatch(setUpdateProductInventory(rez.data));
   return {
     type: 'INCREMENT_STOCK',
     payload: product,
@@ -73,7 +73,7 @@ export const decrementStock = (product) => async(dispatch, getState) => {
   console.log(updatedProduct);
   let rez = await axios.put(`https://api-js401.herokuapp.com/api/v1/products/${product._id}`, updatedProduct);
   console.log('updated product inventory', rez);
-  dispatch(setUpdateProductInventory(rez));
+  dispatch(setUpdateProductInventory(rez.data));
   return {
     type: 'DECREMENT_STOCK',
     payload: product,
