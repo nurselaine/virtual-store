@@ -6,7 +6,6 @@ import { useTheme } from '@mui/material/styles';
 
 function Header(props) {
   const theme = useTheme();
-
   const { cart } = props;
 
   return (

@@ -18,7 +18,7 @@ function App(props) {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
+      <Box sx={{display: 'flex', flexDirection: 'column', height: '100%'}}>
         <main style={{flexGrow: '1'}}>
           <Header />
           <When condition={cart.length > 0}>
