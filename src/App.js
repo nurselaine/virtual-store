@@ -3,6 +3,7 @@ import Footer from './components/footer/footer';
 import Header from './components/header/header';
 import Categories from './components/storefront/categories';
 import Products from './components/storefront/products';
+import SimpleCart from './components/cart/simplecart';
 
 
 import { ThemeProvider, Box } from '@mui/material';
@@ -10,7 +11,6 @@ import { theme } from './Themes/theme';
 import CurrentCategories from './components/storefront/current-categories';
 import { When } from 'react-if';
 import { connect } from 'react-redux';
-import SimpleCart from './components/cart/simplecart';
 
 
 function App(props) {
