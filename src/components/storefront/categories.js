@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import { connect, useDispatch } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { When } from 'react-if';
-import { updateCategory } from '../../store/categories';
-import { updatedProducts } from '../../store/products';
-import { getCategories } from "../../store/categories";
+// import { updateCategory } from '../../store/categories';
+import { updateActiveProducts } from '../../store/products';
+import { getAllCategories, updateCategory } from "../../store/categories";
 
 import { Box, createTheme, Divider, ThemeProvider, Typography } from '@mui/material';
 
@@ -16,14 +16,26 @@ let theme = createTheme({
   }
 });
 
-function Categories(props) {
+function Categories() {
+
+  
   let dispatch = useDispatch();
-
+  
   useEffect(() => {
-    dispatch(getCategories());
+    
+    dispatch(getAllCategories());
   }, []);
+  
+  const categories = useSelector((state) => state.category);
+  const activeCategory = useSelector(state => state.activeCategories);
+  console.log(categories);
 
-  const { categories, updateCategory, activeCategory } = props;
+  const setActiveCategory = (category) => {
+    dispatch(updateCategory(category));
+    dispatch(updateActiveProducts(category));
+  }
+
+  // const { categories, updateCategory, activeCategory } = props;
 
   // let categoriesToRender = categories.filter(category => category.name !== activeCategory);
   return (
@@ -32,10 +44,21 @@ function Categories(props) {
         <Typography variant="h5" >Browse our Categories</Typography>
         <Box sx={{display: 'flex', fontSize: '5rem'}}>
           {
-            categories.map((category, index) => (
+            categories.categories.map((category, index) => (
               <When key={`when-${index}`} condition={category.name !== activeCategory}>
-                <Typography sx={{marginRight: '15px', color: '#0288d1'}} key={`category-${index}`} onClick={() => {updateCategory(category); updatedProducts(category)}}>{category.name.toUpperCase()}</Typography>
-                <Divider sx={{marginRight: '15px'}} orientation="vertical" key={`divider-${index}`} flexItem />
+                <Typography 
+                  sx={{marginRight: '15px', color: '#0288d1'}} 
+                  key={`category-${index}`} 
+                  onClick={() => {setActiveCategory(category)}}
+                >
+                  {category.name.toUpperCase()}
+                </Typography>
+                <Divider 
+                  sx={{marginRight: '15px'}} 
+                  orientation="vertical" 
+                  key={`divider-${index}`} 
+                  flexItem 
+                />
               </When>
             ))
           }
@@ -52,10 +75,4 @@ const mapStateToProps = ({ category }) => { // arguement represents a feild from
   }
 };
 
-const mapDispatchToProps = {
-  updateCategory,
-  updatedProducts,
-  getCategories,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Categories);
+export default connect(mapStateToProps)(Categories);

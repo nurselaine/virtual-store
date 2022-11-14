@@ -36,9 +36,12 @@
       - Connect the application a live API
       - Persist changes to products based on cart activity.
   - Phase 4: Checkout & Detail Pages
+      - Add a routing tool to navigate to home page and product details pages
       - Refactor the store to use Redux middleware
       - pattern (Redux Toolkit)
       - Connect to deployed API and make requests to the API for product data and information
   - Phase 5: 
+    - Refactoring Redux store with Redux Toolkit 
     - Add a cart checkout page
+      - Cart page will have summary of checkout items
     - Add a product details page

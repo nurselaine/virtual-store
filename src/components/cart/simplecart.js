@@ -1,19 +1,28 @@
 import React, { useEffect } from "react";
-import { connect, useDispatch } from "react-redux";
-import { removeFromCart } from "../../store/cart";
+import { connect, useDispatch, useSelector } from "react-redux";
+import { getItemToRemove } from "../../store/cart";
 import { incrementStock, updateProductInventory } from "../../store/products";
 
 import { Box, Typography } from '@mui/material';
 import { useTheme } from "@emotion/react";
 
-function SimpleCart(props) {
-  const { cart, removeFromCart, incrementStock } = props;
+function SimpleCart() {
+  // const { cart, removeFromCart, incrementStock } = props;
+  // console.log(cart);
+  const dispatch = useDispatch();
 
-  // const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(updateProductInventory())
+  }, [incrementStock]);
 
-  // useEffect(() => {
-  //   dispatch(updateProductInventory())
-  // }, [incrementStock]);
+  const cart = useSelector(state => state.cart);
+  console.log(cart);
+
+  const handleRemoveFromCart = (product) => {
+    // getItemToRemove(product);
+    // dispatch(incrementStock(product));
+    console.log('hello');
+  }
 
 
   return (
@@ -31,7 +40,7 @@ function SimpleCart(props) {
           return (
             <div key={`cart-list-${index}`}>
               <li data-testid={`cart-list-${index}`} style={{listStyle: 'none', color: '#0288d1'}}><Typography variant="h6">{product.name}</Typography></li>
-              <button key={`delete-${index}`} onClick={() => {removeFromCart(product); incrementStock(product)}}>delete</button>
+              <button key={`delete-${index}`} onClick={() => handleRemoveFromCart(product)}>delete</button>
             </div>
           )
         })}
@@ -45,7 +54,7 @@ const mapStateToProps = ({cart}) => ({
 });
 
 const mapDispatchToProps = {
-  removeFromCart,
+  // removeFromCart,
   incrementStock,
   updateProductInventory,
 }
